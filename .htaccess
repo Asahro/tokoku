@@ -1,6 +1,26 @@
 RewriteEngine On
+    #RewriteBase / ~tidak perlu menggunakan kode ini jika lokal
 
-# Point all URI to codeigniter bootstrap except direct access to file or dir
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^ index.php [L]
+    #codeigniter specific rule
+    RewriteCond %{REQUEST_URI} ^system.*
+    RewriteRule ^(.*)$ /index.php?/$1 [L,QSA]
+
+    #codeigniter specific rule
+    RewriteCond %{REQUEST_URI} ^application.*
+    RewriteRule ^(.*)$ /index.php?/$1 [L,QSA]
+
+    #this rule removes www from the URL if its used
+    RewriteCond %{HTTP_HOST} ^www.
+    RewriteRule ^(.*)$ http://54.169.88.28/$1 [R=301,L]
+
+    #this rule handles the subdomains
+    #RewriteCond %{HTTP_HOST} ^([a-z0-9]+).paksisista.com.com
+    #RewriteCond $1 !^(index\.php|images|assets|css|js|fonts|ajax|robots\.txt)
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    #RewriteRule ^(.*)$ /index.php?/$1 [L,QSA] ~tidak perlu menggunakan / pada /index.php/$1
+    RewriteRule ^(.*)$ index.php?/$1 [L,QSA]
+
+    php_value upload_max_filesize 40M
+    php_value post_max_size 42M
